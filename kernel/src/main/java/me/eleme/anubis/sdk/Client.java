@@ -7,6 +7,8 @@ import com.google.gson.Gson;
 import me.eleme.anubis.sdk.util.JsonUtil;
 import me.eleme.anubis.sdk.util.Sha256Util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -124,6 +126,32 @@ public class Client {
         throw new RuntimeException("接口访问异常，code:" +code+",msg:" + msg);
     }
 
+    /**
+     * 将业务参数和其他额外文本参数按www-form-urlencoded格式转换成HTTP Body中的字节数组，注意要做URL Encode
+     *
+     * @param bizParams 业务参数
+     * @return HTTP Body中的字节数组
+     */
+    public byte[] toUrlEncodedRequestBody(java.util.Map<String, ?> bizParams) throws Exception {
+        Map<String, String> sortedMap = getSortedMap(Collections.<String, String>emptyMap(), bizParams, null);
+        return buildQueryString(sortedMap).getBytes(ElemeConstants.DEFAULT_CHARSET);
+    }
+
+
+    private String buildQueryString(Map<String, String> sortedMap) throws UnsupportedEncodingException {
+        StringBuilder content = new StringBuilder();
+        int index = 0;
+        for (Map.Entry<String, String> pair : sortedMap.entrySet()) {
+            if (!Strings.isNullOrEmpty(pair.getKey()) && !Strings.isNullOrEmpty(pair.getValue())) {
+                content.append(index == 0 ? "" : "&")
+                        .append(pair.getKey())
+                        .append("=")
+                        .append(URLEncoder.encode(pair.getValue(), ElemeConstants.DEFAULT_CHARSET.name()));
+                index++;
+            }
+        }
+        return content.toString();
+    }
 
     public String sign(java.util.Map<String, String> systemParams, java.util.Map<String, ?> bizParams,
                        java.util.Map<String, String> textParams, String secretKey) throws Exception{

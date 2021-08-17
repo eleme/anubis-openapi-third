@@ -69,9 +69,7 @@ public class Client {
      * @return 当前时间戳
      */
     public String getTimestamp() throws Exception {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        df.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-        return df.format(new Date());
+        return System.currentTimeMillis() +"";
     }
 
     /**

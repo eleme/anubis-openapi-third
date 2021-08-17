@@ -43,6 +43,13 @@ public class Config extends TeaModel {
     @Validation(required = true)
     public String secretKey;
 
+    /**
+     * accessToken
+     */
+    @NameInMap("accessToken")
+    @Validation(required = false)
+    public String accessToken;
+
 
     /**
      * 代理地址（可选）

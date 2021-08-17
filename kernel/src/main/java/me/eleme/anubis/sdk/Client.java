@@ -165,6 +165,10 @@ public class Client {
         return Sha256Util.getsha256(secretKey + content.toString());
     }
 
+    public String toJsonString(Map<String, ?> param) throws Exception{
+        return  JsonUtil.toJsonString(param);
+    }
+
     private Map<String, String> getSortedMap(Map<String, String> systemParams, Map<String, ?> bizParams,
                                              Map<String, String> textParams) throws Exception {
 

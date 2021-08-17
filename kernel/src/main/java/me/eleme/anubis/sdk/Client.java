@@ -1,5 +1,9 @@
 package me.eleme.anubis.sdk;
 
+import com.aliyun.tea.TeaResponse;
+import com.aliyun.tea.utils.StringUtils;
+import com.google.gson.Gson;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -78,5 +82,34 @@ public class Client {
         return context.getConfig(key);
     }
 
+
+    /**
+     * 将网关响应发序列化成Map，同时将API的接口名称和响应原文插入到响应Map的method和body字段中
+     *
+     * @param response HTTP响应
+     * @return 响应反序列化的Map
+     */
+    public java.util.Map<String, Object> readAsJson(TeaResponse response) throws Exception {
+        String responseBody = response.getResponseBody();
+        Map map = new Gson().fromJson(responseBody, Map.class);
+        return map;
+    }
+
+    /**
+     * 从响应Map中提取返回值对象的Map，并将响应原文插入到body字段中
+     *
+     * @param respMap 响应Map
+     * @return 返回值对象Map
+     */
+    public java.util.Map<String, Object> toRespModel(java.util.Map<String, Object> respMap) throws Exception {
+        String code = (String) respMap.get(ElemeConstants.CODE);
+        String msg = (String) respMap.get(ElemeConstants.MSG);
+        //先找正常响应节点
+        if (StringUtils.isEmpty(code) && code.equals(ElemeConstants.SUCCESS_CODE)){
+            Map<String, Object> data = (Map<String, Object>) respMap.get(ElemeConstants.BIZ_CONTENT_FIELD);
+            return data;
+        }
+        throw new RuntimeException("接口访问异常，code:" +code+",msg:" + msg);
+    }
 
 }

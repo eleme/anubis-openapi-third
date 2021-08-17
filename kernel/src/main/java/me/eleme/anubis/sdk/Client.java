@@ -2,14 +2,14 @@ package me.eleme.anubis.sdk;
 
 import com.aliyun.tea.TeaResponse;
 import com.aliyun.tea.utils.StringUtils;
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
+import me.eleme.anubis.sdk.util.JsonUtil;
+import me.eleme.anubis.sdk.util.Sha256Util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 public class Client {
     /**
@@ -84,6 +84,18 @@ public class Client {
 
 
     /**
+     * 将随机顺序的Map转换为有序的Map
+     *
+     * @param input 随机顺序的Map
+     * @return 有序的Map
+     */
+    public java.util.Map<String, String> sortMap(java.util.Map<String, String> input) throws Exception {
+        //GO语言的Map是随机顺序的，每次访问顺序都不同，才需排序
+        return input;
+    }
+
+
+    /**
      * 将网关响应发序列化成Map，同时将API的接口名称和响应原文插入到响应Map的method和body字段中
      *
      * @param response HTTP响应
@@ -110,6 +122,34 @@ public class Client {
             return data;
         }
         throw new RuntimeException("接口访问异常，code:" +code+",msg:" + msg);
+    }
+
+
+    public String sign(java.util.Map<String, String> systemParams, java.util.Map<String, ?> bizParams,
+                       java.util.Map<String, String> textParams, String secretKey) throws Exception{
+        Map<String, String> sortedMap = getSortedMap(systemParams, bizParams, textParams);
+        StringBuilder content = new StringBuilder();
+        int index = 0;
+        for (Map.Entry<String, String> pair : sortedMap.entrySet()) {
+            if (!Strings.isNullOrEmpty(pair.getKey()) && !Strings.isNullOrEmpty(pair.getValue())) {
+                content.append(index == 0 ? "" : "&").append(pair.getKey()).append("=").append(pair.getValue());
+                index++;
+            }
+        }
+        return Sha256Util.getsha256(secretKey + content.toString());
+    }
+
+    private Map<String, String> getSortedMap(Map<String, String> systemParams, Map<String, ?> bizParams,
+                                             Map<String, String> textParams) throws Exception {
+
+        Map<String, String> sortedMap = new TreeMap<>(systemParams);
+        if (bizParams != null && !bizParams.isEmpty()) {
+            sortedMap.put(ElemeConstants.BIZ_CONTENT_FIELD, JsonUtil.toJsonString(bizParams));
+        }
+        if (textParams != null) {
+            sortedMap.putAll(textParams);
+        }
+        return sortedMap;
     }
 
 }

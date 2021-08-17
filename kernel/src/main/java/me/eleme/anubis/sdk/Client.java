@@ -4,6 +4,7 @@ import com.aliyun.tea.TeaResponse;
 import com.aliyun.tea.utils.StringUtils;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
+import me.eleme.anubis.sdk.util.EscapeUtils;
 import me.eleme.anubis.sdk.util.JsonUtil;
 import me.eleme.anubis.sdk.util.Sha256Util;
 
@@ -84,6 +85,17 @@ public class Client {
 
 
     /**
+     * json转义
+     * @param input
+     * @return
+     * @throws Exception
+     */
+    public String escapeJson(String input) throws Exception {
+        return EscapeUtils.escapeJson(input);
+    }
+
+
+    /**
      * 将随机顺序的Map转换为有序的Map
      *
      * @param input 随机顺序的Map
@@ -118,8 +130,8 @@ public class Client {
         String msg = (String) respMap.get(ElemeConstants.MSG);
         //先找正常响应节点
         if (!StringUtils.isEmpty(code) && code.equals(ElemeConstants.SUCCESS_CODE)){
-            Map<String, Object> data = (Map<String, Object>) respMap.get(ElemeConstants.BIZ_CONTENT_FIELD);
-            return data;
+            String data = (String) respMap.get(ElemeConstants.BIZ_CONTENT_FIELD);
+            return JsonUtil.jsonToMap(data);
         }
         throw new RuntimeException("接口访问异常，code:" +code+",msg:" + msg);
     }
@@ -165,7 +177,7 @@ public class Client {
         return Sha256Util.getsha256(secretKey + content.toString());
     }
 
-    public String toJsonString(Map<String, ?> param) throws Exception{
+    public String toJSONString(Map<String, ?> param) throws Exception{
         return  JsonUtil.toJsonString(param);
     }
 
@@ -176,7 +188,7 @@ public class Client {
         if (bizParams != null && !bizParams.isEmpty()) {
             sortedMap.put(ElemeConstants.BIZ_CONTENT_FIELD, JsonUtil.toJsonString(bizParams));
         }
-        if (textParams != null) {
+        if (textParams != null&& !textParams.isEmpty()) {
             sortedMap.putAll(textParams);
         }
         return sortedMap;

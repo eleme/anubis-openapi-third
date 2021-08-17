@@ -1,12 +1,18 @@
 package me.eleme.anubis.sdk.util;
 
 import com.aliyun.tea.TeaModel;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class JsonUtil {
+
+    public static Map<String, Object> jsonToMap(String json) {
+        return new Gson().fromJson(json,new TypeToken<Map<String, Object>>(){}.getType());
+    }
+
     /**
      * 将Map转换为Json字符串，转换过程中对于TeaModel，使用标注的字段名称而不是字段的变量名
      *

@@ -117,7 +117,7 @@ public class Client {
         String code = (String) respMap.get(ElemeConstants.CODE);
         String msg = (String) respMap.get(ElemeConstants.MSG);
         //先找正常响应节点
-        if (StringUtils.isEmpty(code) && code.equals(ElemeConstants.SUCCESS_CODE)){
+        if (!StringUtils.isEmpty(code) && code.equals(ElemeConstants.SUCCESS_CODE)){
             Map<String, Object> data = (Map<String, Object>) respMap.get(ElemeConstants.BIZ_CONTENT_FIELD);
             return data;
         }

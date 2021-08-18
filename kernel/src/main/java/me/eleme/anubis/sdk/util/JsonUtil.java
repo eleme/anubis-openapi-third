@@ -31,7 +31,7 @@ public class JsonUtil {
         return new Gson().toJson(result);
     }
 
-    private static Map<String, Object> getTeaModelMap(TeaModel teaModel) {
+    public static Map<String, Object> getTeaModelMap(TeaModel teaModel) {
         Map<String, Object> result = new HashMap<>();
         Map<String, Object> teaModelMap = teaModel.toMap();
         for (Map.Entry<String, Object> pair : teaModelMap.entrySet()) {

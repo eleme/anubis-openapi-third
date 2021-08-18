@@ -1,5 +1,6 @@
 package me.eleme.anubis.sdk;
 
+import com.aliyun.tea.TeaModel;
 import com.aliyun.tea.TeaResponse;
 import com.aliyun.tea.utils.StringUtils;
 import com.google.common.base.Strings;
@@ -92,6 +93,17 @@ public class Client {
      */
     public String escapeJson(String input) throws Exception {
         return EscapeUtils.escapeJson(input);
+    }
+
+    /**
+     * 对象转json
+     * @param teaModel
+     * @return
+     * @throws Exception
+     */
+    public String objToJSONString(TeaModel teaModel) throws Exception {
+        Map<String, Object> teaModelMap = JsonUtil.getTeaModelMap(teaModel);
+        return JsonUtil.toJsonString(teaModelMap);
     }
 
 

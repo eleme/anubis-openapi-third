@@ -95,6 +95,17 @@ public class Client {
         return EscapeUtils.escapeJson(input);
     }
 
+
+    /**
+     * json去除转义
+     * @param input
+     * @return
+     * @throws Exception
+     */
+    public String unescapeJson(String input) throws Exception {
+        return EscapeUtils.unescapeJson(input);
+    }
+
     /**
      * 对象转json
      * @param teaModel

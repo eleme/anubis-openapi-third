@@ -6,7 +6,7 @@ class Context:
     def __init__(self,config):
         self.config = TeaModel.to_map(config)
     def get_config(self,key):
-        if(self.config[key] == None):
-            return None
+        if(self.config[key] is None or self.config[key] == ''):
+            return ''
         else:
             return str(self.config[key])

@@ -1,5 +1,0 @@
-CODE = 'code'
-MSG = 'msg'
-SUCCESS_CODE = '200'
-BIZ_CONTENT_FIELD = 'business_data'
-DEFAULT_CHARSET = 'UTF-8'

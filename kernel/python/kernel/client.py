@@ -42,7 +42,7 @@ class Client:
         return sort_map(params)
 
     def read_as_json(self,teaResponse):
-        return json.dumps(teaResponse.__dict__,cls=MyEncoder)
+        return teaResponse.body.decode('utf-8')
 
     def sign(self,system_params,biz_params,text_params,secret_key):
         mergeDic = merge(system_params,biz_params,text_params)

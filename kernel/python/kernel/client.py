@@ -39,7 +39,7 @@ class Client:
         return json.dumps(params)
 
     def sort_map(self,params):
-        return sort_map(params)
+        return params
 
     def read_as_json(self,teaResponse):
         return json.loads(teaResponse.body.decode('utf-8'))
@@ -94,8 +94,9 @@ if __name__ == '__main__':
         'msg':'系统内部错误',
         'business_data':'{"a": "1"}'
     }
-    client.to_resp_model(params)
-    r = bytes(json.dumps(params),'utf-8')
+    client.sort_map(params)
+    # client.to_resp_model(params)
+    # r = bytes(json.dumps(params),'utf-8')
 
     # print(r.decode('utf-8'))
     # content = client.build_query_string(params)

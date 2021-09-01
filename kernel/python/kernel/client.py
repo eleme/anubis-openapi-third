@@ -4,7 +4,13 @@ import time
 from urllib.parse import urlencode
 from kernel.config import Config
 from kernel.context import Context
+from Tea.response import TeaResponse
 
+class MyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, bytes):
+            return str(obj, encoding='utf-8');
+        return json.JSONEncoder.default(self, obj)
 
 def merge(system_params, biz_params, text_params):
     biz_params.update(system_params)
@@ -36,7 +42,7 @@ class Client:
         return sort_map(params)
 
     def read_as_json(self,teaResponse):
-        return json.dumps(teaResponse.__dict__)
+        return json.dumps(teaResponse.__dict__,cls=MyEncoder)
 
     def sign(self,system_params,biz_params,text_params,secret_key):
         mergeDic = merge(system_params,biz_params,text_params)
@@ -65,7 +71,10 @@ class Client:
         return content
 if __name__ == '__main__':
     config = Config()
+    config.secretKey = '111'
     context = Context(config)
+    key = context.get_config('secretKey')
+    print(key)
     client = Client(context)
     dic1 = {
         'a':'2'
@@ -76,8 +85,10 @@ if __name__ == '__main__':
     dic3 = {
         'c':'3'
     }
-
-
+    teaResponse = TeaResponse()
+    teaResponse.headers = ''
+    JSONStr = client.read_as_json(TeaResponse)
+    print(JSONStr)
     params = {
         'code':'200',
         'msg':'系统内部错误',

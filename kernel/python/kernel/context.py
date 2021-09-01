@@ -2,11 +2,12 @@ from Tea.model import TeaModel
 
 
 class Context:
-    config = None
+    config:dict = None
     def __init__(self,config):
-        self.config = TeaModel.to_map(config)
+        self.config = config.__dict__
     def get_config(self,key):
-        if(self.config[key] is None or self.config[key] == ''):
+        print(self.config[key])
+        if(self.config[key] is None  or str(self.config[key]) == ''):
             return ''
         else:
             return str(self.config[key])

@@ -2,7 +2,6 @@ import hashlib
 import json
 import time
 from urllib.parse import urlencode
-import const
 from kernel.config import Config
 from kernel.context import Context
 
@@ -16,7 +15,11 @@ def sort_map(params):
     return sorted(params.items(), key=lambda x:x[0], reverse=False)
 
 class Client:
-
+    CODE = 'code'
+    MSG = 'msg'
+    SUCCESS_CODE = '200'
+    BIZ_CONTENT_FIELD = 'business_data'
+    DEFAULT_CHARSET = 'UTF-8'
     context = None
     def __init__(self,context):
        self.context = context
@@ -48,10 +51,10 @@ class Client:
         return json_str
 
     def to_resp_model(self,params):
-        code = str(params[const.CODE])
-        msg = str(params[const.MSG])
-        if(code != None and code == const.SUCCESS_CODE):
-            data = str(params[const.BIZ_CONTENT_FIELD])
+        code = str(params[self.CODE])
+        msg = str(params[self.MSG])
+        if(code != None and code == self.SUCCESS_CODE):
+            data = str(params[self.BIZ_CONTENT_FIELD])
             return json.loads(data)
         raise Exception('接口访问异常，code:{},msg:{}'.format(code,msg))
     def to_url_encoded_request_body(self,params):

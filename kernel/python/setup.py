@@ -30,7 +30,7 @@ AUTHOR = "Alibaba Cloud"
 AUTHOR_EMAIL = "alibaba-cloud-sdk-dev-team@list.alibaba-inc.com"
 URL = "https://github.com/eleme/anubis-openapi-third/tree/main/kernel/python"
 TOPDIR = os.path.dirname(__file__) or "."
-VERSION = "1.0.7"
+VERSION = "1.0.8"
 
 with open("README.md", encoding="utf-8") as fp:
     LONG_DESCRIPTION = fp.read()

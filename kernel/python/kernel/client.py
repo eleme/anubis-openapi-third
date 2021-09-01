@@ -47,7 +47,8 @@ class Client:
     def sign(self,system_params,biz_params,text_params,secret_key):
         mergeDic = merge(system_params,biz_params,text_params)
         sorted_map = sort_map(mergeDic)
-        encodeStr = urlencode(sorted_map)
+        encodeStr = urlencode(sorted_map,'utf-8')
+        encodeStr = encodeStr.replace('+','')
         x = hashlib.sha256()
         x.update((secret_key + encodeStr).encode('utf-8'))
         return x.hexdigest()
@@ -67,7 +68,7 @@ class Client:
         sorted_map = sort_map(params)
         return self.build_query_string(sorted_map)
     def build_query_string(self,sorted_dict):
-        content = urlencode(sorted_dict)
+        content = urlencode(sorted_dict,'utf-8')
         return content
 if __name__ == '__main__':
     config = Config()
@@ -77,29 +78,47 @@ if __name__ == '__main__':
     print(key)
     client = Client(context)
     dic1 = {
-        'a':'2'
+	'signature': '05cc9ee5a48c264568c208547fcdf6f35546c30ee4598acfa4c99f233f8f21f3',
+	'app_id': '4139937041702170912',
+	'merchant_id': '87891',
+	'access_token': 'efd83327-63a9-4e03-b913-1accbcc549b6',
+	'timestamp': '1630500481740',
+	'version': '1.0',
+	'business_data': '{\"page_no\": \"1\", \"page_size\": \"20\", \"merchant_id\": \"87891\"}'
     }
     dic2 = {
-        'b':'1'
+
     }
     dic3 = {
-        'c':'3'
+
     }
-    teaResponse = TeaResponse()
-    teaResponse.headers = ''
-    JSONStr = client.read_as_json(TeaResponse)
-    print(JSONStr)
+    # teaResponse = TeaResponse()
+    # teaResponse.headers = ''
+    # JSONStr = client.read_as_json(TeaResponse)
+    # print(JSONStr)
     params = {
         'code':'200',
         'msg':'系统内部错误',
         'business_data':'{"a": "1"}'
     }
-    client.sort_map(params)
+
+    map = {
+	'signature': '05cc9ee5a48c264568c208547fcdf6f35546c30ee4598acfa4c99f233f8f21f3',
+	'app_id': '4139937041702170912',
+	'merchant_id': '87891',
+	'access_token': 'efd83327-63a9-4e03-b913-1accbcc549b6',
+	'timestamp': '1630500481740',
+	'version': '1.0',
+	'business_data': '{\"page_no\": \"1\", \"page_size\": \"20\", \"merchant_id\": \"87891\"}'
+    }
+
+    # print(urlencode(sort_map(map),'utf-8'))
+    # client.sort_map(params)
     # client.to_resp_model(params)
     # r = bytes(json.dumps(params),'utf-8')
 
     # print(r.decode('utf-8'))
     # content = client.build_query_string(params)
-    print(urlencode(params))
+    # print(urlencode(params))
     dic4 = client.sign(dic1,dic2,dic3,"123456")
     print(dic4)

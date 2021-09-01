@@ -19,16 +19,16 @@ import os
 from setuptools import setup, find_packages
 
 """
-Setup module for anubis-openapi-kernel.
+Setup module for alibabacloud-tea-console.
 Created on 08/06/2020
 @author: Alibaba Cloud
 """
 
 PACKAGE = "anubis_openapi_kernel"
-DESCRIPTION = "The anubis-openapi-kernel module of eleme Python SDK."
-AUTHOR = "ele me"
+DESCRIPTION = "The anubis-openapi-kernel module of alibabaCloud Python SDK."
+AUTHOR = "Alibaba Cloud"
 AUTHOR_EMAIL = "alibaba-cloud-sdk-dev-team@list.alibaba-inc.com"
-URL = "https://github.com/eleme/anubis-openapi-third/tree/main/kernel"
+URL = "https://github.com/eleme/anubis-openapi-third/tree/main/kernel/python"
 TOPDIR = os.path.dirname(__file__) or "."
 VERSION = __import__(PACKAGE).__version__
 
@@ -43,7 +43,7 @@ setup_args = {
     'author_email': AUTHOR_EMAIL,
     'license': "Apache License 2.0",
     'url': URL,
-    'keywords': ["anubis-openapi-kernel", "openapi", "kernel"],
+    'keywords': ["alibabacloud", "sdk", "tea"],
     'packages': find_packages(exclude=["tests*"]),
     'platforms': 'any',
     'install_requires': ["alibabacloud-tea>=0.0.1"],

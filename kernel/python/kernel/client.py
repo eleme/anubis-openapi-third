@@ -46,8 +46,8 @@ class Client:
 
     def sign(self,system_params,biz_params,text_params,secret_key):
         mergeDic = merge(system_params,biz_params,text_params)
-        sorted_map = sort_map(mergeDic)
-        encodeStr = urlencode(sorted_map,'utf-8')
+        # sorted_map = sort_map(mergeDic)
+        encodeStr = self.build_query_string(mergeDic)
         encodeStr = encodeStr.replace('+','')
         x = hashlib.sha256()
         x.update((secret_key + encodeStr).encode('utf-8'))
@@ -65,11 +65,19 @@ class Client:
             return json.loads(data)
         raise Exception('接口访问异常，code:{},msg:{}'.format(code,msg))
     def to_url_encoded_request_body(self,params):
-        sorted_map = sort_map(params)
-        return self.build_query_string(sorted_map)
+        # sorted_map = sort_map(params)
+        return self.build_query_string(params)
     def build_query_string(self,sorted_dict):
-        content = urlencode(sorted_dict,'utf-8')
-        return content
+        keys = []
+
+        for k in sorted_dict:
+                keys.append(k)
+        new_keys = sorted(keys)
+        pList = []
+        for i in new_keys :
+            pList.append(i+"="+sorted_dict[i])
+        requestUrl = '&'.join(pList)
+        return requestUrl
 if __name__ == '__main__':
     config = Config()
     config.secretKey = '111'
@@ -107,10 +115,12 @@ if __name__ == '__main__':
 	'app_id': '4139937041702170912',
 	'merchant_id': '87891',
 	'access_token': 'efd83327-63a9-4e03-b913-1accbcc549b6',
-	'timestamp': '1630500481740',
+	'timestamp': '1630547616151',
 	'version': '1.0',
 	'business_data': '{\"page_no\": \"1\", \"page_size\": \"20\", \"merchant_id\": \"87891\"}'
     }
+    map2 = {}
+    map3 = {}
 
     # print(urlencode(sort_map(map),'utf-8'))
     # client.sort_map(params)
@@ -120,5 +130,20 @@ if __name__ == '__main__':
     # print(r.decode('utf-8'))
     # content = client.build_query_string(params)
     # print(urlencode(params))
-    dic4 = client.sign(dic1,dic2,dic3,"123456")
+    my_params = {
+        'page_no':'1',
+        'page_size': '20',
+        'merchant_id':'87891'
+
+    }
+    system_params = {
+        'app_id': '4139937041702170912',
+        'merchant_id':'87891',
+        'access_token': 'efd83327-63a9-4e03-b913-1accbcc549b6',
+        'timestamp': '1630547616151',
+        'version': '1.0',
+        'business_data': json.dumps(my_params).replace(' ','')
+    }
+    # content = client.build_query_string(system_params);
+    dic4 = client.sign(system_params,map2,map3,"3badb149-67df-462e-9c57-683016d0a5d3")
     print(dic4)

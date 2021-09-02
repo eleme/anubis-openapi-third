@@ -75,7 +75,7 @@ class Client:
         new_keys = sorted(keys)
         pList = []
         for i in new_keys :
-            pList.append(i+"="+sorted_dict[i])
+            pList.append(str(i)+"="+str(sorted_dict[i]))
         requestUrl = '&'.join(pList)
         return requestUrl
 if __name__ == '__main__':

@@ -54,7 +54,7 @@ class Client:
         return x.hexdigest()
 
     def obj_to_jsonstring(self,obj):
-        json_str = json.dumps(obj,default=lambda obj:obj.__dict,sort_keys=True,indent=4)
+        json_str = json.dumps(obj,default=lambda obj:obj.__dict__,sort_keys=True,indent=4)
         return json_str
 
     def to_resp_model(self,params):
